@@ -1,0 +1,18 @@
+{
+  "name": null,
+  "version": "0.1.0",
+  "description": null,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "John Shearer <john@ultranaut.com> (http://ultranaut.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-connect": "^2.2.0",
+    "gulp-eslint": "^0.13.2",
+    "gulp-plumber": "^1.0.1",
+    "gulp-react": "^3.0.1"
+  }
+}
