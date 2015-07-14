@@ -9,7 +9,8 @@ var react = require('gulp-react');
 
 var paths = {
   src: './src',
-  html: this.src + '/*.html',
+  css: './src/css/*.css',
+  html: './src/*.html',
   js: './src/js/*.js',
   jsx: './src/js/jsx/**/*.js'
 };
@@ -26,6 +27,12 @@ gulp.task('html', function () {
   gulp.src(paths.html)
       .pipe(plumber())
       .pipe(connect.reload());
+});
+
+gulp.task('css', function () {
+  return gulp.src(paths.css)
+    .pipe(plumber())
+    .pipe(connect.reload());
 });
 
 gulp.task('js', function () {
@@ -48,6 +55,7 @@ gulp.task('watch', function () {
   gulp.watch([paths.html], ['html']);
   gulp.watch([paths.js], ['js']);
   gulp.watch([paths.jsx], ['react']);
+  gulp.watch([paths.css], ['css']);
 });
 
 gulp.task('default', ['connect', 'html', 'js', 'react', 'watch']);
