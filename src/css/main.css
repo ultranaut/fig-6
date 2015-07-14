@@ -49,36 +49,25 @@ hr {
 }
 
 /*
- * Remove the gap between audio, canvas, iframes,
- * images, videos and the bottom of their containers:
- * https://github.com/h5bp/html5-boilerplate/issues/440
+ * Allow only vertical resizing of textareas.
  */
 
-audio,
-canvas,
-iframe,
-img,
-svg,
-video {
-  vertical-align: middle;
+textarea {
+    resize: vertical;
 }
-
-/*
- * Remove default fieldset styles.
- */
-
-fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
-}
-
 
 /* ==========================================================================
 Author's custom styles
 ========================================================================== */
 body {
 	text-align: center;
+	background-color: #2b2b2b;
+	color: #ddd;
+}
+
+hr {
+	margin: 2.5em auto;
+	width: 50%;
 }
 
 .container {
@@ -86,18 +75,39 @@ body {
 	width: 320px;
 }
 
+h1 {
+	font-weight: normal;
+}
+
+.mcode {
+	background-color: #2b2b2b;
+	border: solid 1px #555;
+	border-radius: 4px;
+	width: 80%;
+	padding: 0.5em;
+}
+
+.mcode:focus {
+	outline: 0;
+}
+
 img {
 	width: 90%;
 }
 
 header {
-	text-align: left;
 	display: inline-block;
 	margin: 0 auto;
 }
 
+header .instruction {
+	text-align: right;
+}
+
 .output {
+	margin: 20px;
 	font-size: 1.5em;
+	font-family: monospace;
 }
 .small {
 }
