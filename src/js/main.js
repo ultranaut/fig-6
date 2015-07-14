@@ -63,10 +63,21 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
     window.addEventListener('keyup', this.handleKeyUp);
   },
 
+  updateInput: function (inputValue) {
+    this.setState({
+      input: inputValue
+    }, this.decodeInput);
+  },
+
   handleKeyDown: function (e) {
     if (e.keyCode === 18 && !this.state.keydown) {
       e.preventDefault();
       var now = window.performance.now();
+      if (now - this.state.upTime > 3000) {
+        this.setState({
+          input: this.state.input + ' / '
+        });
+      }
       if (now - this.state.upTime > 4 * this.state.dotDuration) {
         this.setState({
           input: this.state.input + ' '
@@ -85,12 +96,12 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
       var input = '';
       if (duration < this.state.dotDuration) {
         input = '.';
-        console.log('dot', duration);
+        // console.log('dot', duration);
       }
       // else if (duration > 2 * this.state.dotDuration) {
       else {
         input = '-';
-        console.log('dash', duration);
+        // console.log('dash', duration);
       }
       this.setState({
         keydown: false,
@@ -104,12 +115,20 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
 
   decodeInput: function () {
     var tokens = this.state.input.split(' ');
-    console.log(tokens);
+    console.log(this.state.input, tokens);
     var decoded = '';
+    var char;
     for (var idx in tokens) {
       var token = tokens[idx];
-      if (token === '') { continue; }
-      var char = this.state.map[token];
+      if (token === '') {
+        continue;
+      }
+      if (token === '/') {
+        char = ' ';
+      }
+      else {
+        char = this.state.map[token];
+      }
       decoded += typeof char !== 'undefined' ? char : '';
     }
     this.setState({ output: decoded });
@@ -117,7 +136,9 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
 
   render: function () {
     return (
-      React.createElement(Display, {output: this.state.output, decodeInput: this.decodeInput})
+      React.createElement(Display, {output: this.state.output, 
+               input: this.state.input, 
+               updateInput: this.updateInput})
     );
   }
 
@@ -127,17 +148,49 @@ var Display = React.createClass({displayName: "Display", // eslint-disable-line 
   render: function () {
     return (
       React.createElement("div", {className: "app"}, 
-        React.createElement("img", {src: "images/L-Telegraph1.png"}), 
         React.createElement("header", null, 
-          React.createElement("h1", null, "Tap it out..."), 
-          React.createElement("p", null, "...using the alt/option key"), 
-          React.createElement("p", {className: "small"}, "(sorry no touch events at this time)")
+          React.createElement("h1", null, "Morse Decoder"), 
+          React.createElement("img", {src: "images/L-Telegraph1_mod.png"})
+        ), 
+        React.createElement("div", {className: "tap"}, 
+          React.createElement("h2", null, "Tap it out..."), 
+          React.createElement("p", {className: "small"}, "(using the alt/option key)")
+        ), 
+        React.createElement("hr", null), 
+        React.createElement("div", {className: "paste"}, 
+          React.createElement("h2", null, "...or paste it"), 
+          React.createElement(Input, {decodeInput: this.props.decodeInput, 
+                 updateInput: this.props.updateInput})
         ), 
         React.createElement(Output, {output: this.props.output})
       )
     );
   }
 
+});
+
+var Input = React.createClass({displayName: "Input", // eslint-disable-line no-unused-vars
+  getInitialState: function () {
+    return {
+      input: ''
+    };
+  },
+
+  handleChange: function (e) {
+    var inputValue = e.target.value;
+    this.setState({
+      input: inputValue
+    });
+    this.props.updateInput(inputValue);
+  },
+
+  render: function () {
+    return (
+      React.createElement("textarea", {className: "mcode", 
+                onChange: this.handleChange, 
+                value: this.state.input})
+    );
+  }
 });
 
 var Output = React.createClass({displayName: "Output", // eslint-disable-line no-unused-vars
