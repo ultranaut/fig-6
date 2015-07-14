@@ -149,7 +149,7 @@ var Display = React.createClass({ // eslint-disable-line no-unused-vars
     return (
       <div className="app">
         <header>
-          <h1>Morse Decoder</h1>
+          <h1>Fig. 6.</h1>
           <img src="images/L-Telegraph1_mod.png" />
         </header>
         <div className="tap">
@@ -158,7 +158,7 @@ var Display = React.createClass({ // eslint-disable-line no-unused-vars
         </div>
         <hr />
         <div className="paste">
-          <h2>...or paste it</h2>
+          <h2>...or use the keyboard</h2>
           <Input decodeInput={this.props.decodeInput}
                  updateInput={this.props.updateInput} />
         </div>

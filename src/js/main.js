@@ -149,7 +149,7 @@ var Display = React.createClass({displayName: "Display", // eslint-disable-line 
     return (
       React.createElement("div", {className: "app"}, 
         React.createElement("header", null, 
-          React.createElement("h1", null, "Morse Decoder"), 
+          React.createElement("h1", null, "Fig. 6."), 
           React.createElement("img", {src: "images/L-Telegraph1_mod.png"})
         ), 
         React.createElement("div", {className: "tap"}, 
@@ -158,7 +158,7 @@ var Display = React.createClass({displayName: "Display", // eslint-disable-line 
         ), 
         React.createElement("hr", null), 
         React.createElement("div", {className: "paste"}, 
-          React.createElement("h2", null, "...or paste it"), 
+          React.createElement("h2", null, "...or use the keyboard"), 
           React.createElement(Input, {decodeInput: this.props.decodeInput, 
                  updateInput: this.props.updateInput})
         ), 
