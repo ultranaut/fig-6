@@ -67,8 +67,10 @@ body {
 }
 
 hr {
-  margin: 2.5rem auto;
-  width: 50%;
+  margin: 0.5rem auto;
+  color: #666;
+  width: 70%;
+  border-top: 1px solid #777;
 }
 
 .container {
@@ -79,6 +81,23 @@ hr {
 
 h1 {
   font-weight: normal;
+}
+
+h2 {
+  margin-bottom: .2rem;
+}
+
+#tap-pad {
+  margin: 0 auto 2rem;
+  width: 80%;
+  padding: 1.5em 0;
+  border-radius: 8px;
+  border: solid 1px #444;
+  background: #3a3a3a;
+}
+
+.paste {
+  margin: 2rem 0 0;
 }
 
 .mcode {
@@ -108,12 +127,12 @@ header .instruction {
 
 .output {
   margin: 20px;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   text-align: left;
 }
 
 .small {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 }
 
 

@@ -54,13 +54,21 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
 				'----.': '9',
 				'/': ' ',
 				'|': ' '
-      }
+      },
+
+      ongoingTouches: []
     };
   },
 
   componentDidMount: function () {
+    // keyboard events
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('keyup', this.handleKeyUp);
+
+    // touch events
+    var pad = document.getElementById('tap-pad');
+    pad.addEventListener('touchstart', this.handleKeyDown, false);
+    pad.addEventListener('touchend', this.handleKeyUp, false);
   },
 
   updateInput: function (inputValue) {
@@ -71,7 +79,9 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
 
   handleKeyDown: function (e) {
     // only run this on initial keydown event
-    if (e.keyCode === this.state.hotKey && !this.state.keydown) {
+    if (e.keyCode === this.state.hotKey
+        || e.type === 'touchstart'
+        && !this.state.keydown) {
       e.preventDefault();
       var now = window.performance.now();
 
@@ -156,10 +166,12 @@ var Display = React.createClass({ // eslint-disable-line no-unused-vars
           <h1>Fig. 6.</h1>
           <img src="images/L-Telegraph1_mod.png" alt="Fig. 6." />
         </header>
-        <div className="tap">
-          <h2>Tap it out...</h2>
-          <p className='small'>(using the alt/option key)</p>
+        <div id="tap-pad">
+          <h2>Tap it out here...</h2>
+          <p className='small'>(or use the alt/option key)</p>
         </div>
+        <hr />
+        <Output output={this.props.output} />
         <hr />
         <div className="paste">
           <h2>...or use the keyboard</h2>
@@ -167,7 +179,6 @@ var Display = React.createClass({ // eslint-disable-line no-unused-vars
                  updateInput={this.props.updateInput}
                  input={this.props.input} />
         </div>
-        <Output output={this.props.output} />
       </div>
     );
   }
@@ -193,7 +204,8 @@ var Input = React.createClass({ // eslint-disable-line no-unused-vars
     return (
       <textarea className="mcode"
                 onChange={this.handleChange}
-                value={this.props.input} />
+                value={this.props.input}
+                placeholder="dots 'n' dashes 'n' such" />
     );
   }
 });

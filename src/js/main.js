@@ -54,13 +54,21 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
 				'----.': '9',
 				'/': ' ',
 				'|': ' '
-      }
+      },
+
+      ongoingTouches: []
     };
   },
 
   componentDidMount: function () {
+    // keyboard events
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('keyup', this.handleKeyUp);
+
+    // touch events
+    var pad = document.getElementById('tap-pad');
+    pad.addEventListener('touchstart', this.handleKeyDown, false);
+    pad.addEventListener('touchend', this.handleKeyUp, false);
   },
 
   updateInput: function (inputValue) {
@@ -71,7 +79,9 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
 
   handleKeyDown: function (e) {
     // only run this on initial keydown event
-    if (e.keyCode === this.state.hotKey && !this.state.keydown) {
+    if (e.keyCode === this.state.hotKey
+        || e.type === 'touchstart'
+        && !this.state.keydown) {
       e.preventDefault();
       var now = window.performance.now();
 
@@ -156,18 +166,19 @@ var Display = React.createClass({displayName: "Display", // eslint-disable-line 
           React.createElement("h1", null, "Fig. 6."), 
           React.createElement("img", {src: "images/L-Telegraph1_mod.png", alt: "Fig. 6."})
         ), 
-        React.createElement("div", {className: "tap"}, 
-          React.createElement("h2", null, "Tap it out..."), 
-          React.createElement("p", {className: "small"}, "(using the alt/option key)")
+        React.createElement("div", {id: "tap-pad"}, 
+          React.createElement("h2", null, "Tap it out here..."), 
+          React.createElement("p", {className: "small"}, "(or use the alt/option key)")
         ), 
+        React.createElement("hr", null), 
+        React.createElement(Output, {output: this.props.output}), 
         React.createElement("hr", null), 
         React.createElement("div", {className: "paste"}, 
           React.createElement("h2", null, "...or use the keyboard"), 
           React.createElement(Input, {decodeInput: this.props.decodeInput, 
                  updateInput: this.props.updateInput, 
                  input: this.props.input})
-        ), 
-        React.createElement(Output, {output: this.props.output})
+        )
       )
     );
   }
@@ -193,7 +204,8 @@ var Input = React.createClass({displayName: "Input", // eslint-disable-line no-u
     return (
       React.createElement("textarea", {className: "mcode", 
                 onChange: this.handleChange, 
-                value: this.props.input})
+                value: this.props.input, 
+                placeholder: "dots 'n' dashes 'n' such"})
     );
   }
 });
