@@ -9,11 +9,11 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
 
       dotDuration: 150,
 
-      keydown: false,
       hotKey: 18, // alt/option key
+      keydown: false,
 
       downTime: 0,
-      upTime: 0,
+      keyUpTime: 0,
 
       map: {
         '.-': 'A',
@@ -70,20 +70,27 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
   },
 
   handleKeyDown: function (e) {
-    if (e.keyCode === 18 && !this.state.keydown) {
+    // only run this on initial keydown event
+    if (e.keyCode === this.state.hotKey && !this.state.keydown) {
       e.preventDefault();
       var now = window.performance.now();
-      if (now - this.state.upTime > 3000) {
+
+      if (this.state.keyUpTime > 0) {
+        var pause = now - this.state.keyUpTime;
+      }
+
+      // if really long pause, start a new word
+      if (pause > 3000) {
         this.setState({
           input: this.state.input + ' / '
         });
       }
-      if (now - this.state.upTime > 4 * this.state.dotDuration) {
+      else if (pause > 4 * this.state.dotDuration) {
         this.setState({
           input: this.state.input + ' '
         });
       }
-      this.setState({ upTime: 0 });
+      this.setState({ keyUpTime: 0 });
 
       this.setState({ keydown: true, downTime: now });
     }
@@ -96,17 +103,14 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
       var input = '';
       if (duration < this.state.dotDuration) {
         input = '.';
-        // console.log('dot', duration);
       }
-      // else if (duration > 2 * this.state.dotDuration) {
       else {
         input = '-';
-        // console.log('dash', duration);
       }
       this.setState({
         keydown: false,
         downTime: 0,
-        upTime: now,
+        keyUpTime: now,
         input: this.state.input + input
       });
       this.decodeInput();
@@ -150,7 +154,7 @@ var Display = React.createClass({ // eslint-disable-line no-unused-vars
       <div className="app">
         <header>
           <h1>Fig. 6.</h1>
-          <img src="images/L-Telegraph1_mod.png" />
+          <img src="images/L-Telegraph1_mod.png" alt="Fig. 6." />
         </header>
         <div className="tap">
           <h2>Tap it out...</h2>
@@ -160,7 +164,8 @@ var Display = React.createClass({ // eslint-disable-line no-unused-vars
         <div className="paste">
           <h2>...or use the keyboard</h2>
           <Input decodeInput={this.props.decodeInput}
-                 updateInput={this.props.updateInput} />
+                 updateInput={this.props.updateInput}
+                 input={this.props.input} />
         </div>
         <Output output={this.props.output} />
       </div>
@@ -188,7 +193,7 @@ var Input = React.createClass({ // eslint-disable-line no-unused-vars
     return (
       <textarea className="mcode"
                 onChange={this.handleChange}
-                value={this.state.input} />
+                value={this.props.input} />
     );
   }
 });

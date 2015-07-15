@@ -9,11 +9,11 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
 
       dotDuration: 150,
 
-      keydown: false,
       hotKey: 18, // alt/option key
+      keydown: false,
 
       downTime: 0,
-      upTime: 0,
+      keyUpTime: 0,
 
       map: {
         '.-': 'A',
@@ -70,20 +70,27 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
   },
 
   handleKeyDown: function (e) {
-    if (e.keyCode === 18 && !this.state.keydown) {
+    // only run this on initial keydown event
+    if (e.keyCode === this.state.hotKey && !this.state.keydown) {
       e.preventDefault();
       var now = window.performance.now();
-      if (now - this.state.upTime > 3000) {
+
+      if (this.state.keyUpTime > 0) {
+        var pause = now - this.state.keyUpTime;
+      }
+
+      // if really long pause, start a new word
+      if (pause > 3000) {
         this.setState({
           input: this.state.input + ' / '
         });
       }
-      if (now - this.state.upTime > 4 * this.state.dotDuration) {
+      else if (pause > 4 * this.state.dotDuration) {
         this.setState({
           input: this.state.input + ' '
         });
       }
-      this.setState({ upTime: 0 });
+      this.setState({ keyUpTime: 0 });
 
       this.setState({ keydown: true, downTime: now });
     }
@@ -96,17 +103,14 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
       var input = '';
       if (duration < this.state.dotDuration) {
         input = '.';
-        // console.log('dot', duration);
       }
-      // else if (duration > 2 * this.state.dotDuration) {
       else {
         input = '-';
-        // console.log('dash', duration);
       }
       this.setState({
         keydown: false,
         downTime: 0,
-        upTime: now,
+        keyUpTime: now,
         input: this.state.input + input
       });
       this.decodeInput();
@@ -150,7 +154,7 @@ var Display = React.createClass({displayName: "Display", // eslint-disable-line 
       React.createElement("div", {className: "app"}, 
         React.createElement("header", null, 
           React.createElement("h1", null, "Fig. 6."), 
-          React.createElement("img", {src: "images/L-Telegraph1_mod.png"})
+          React.createElement("img", {src: "images/L-Telegraph1_mod.png", alt: "Fig. 6."})
         ), 
         React.createElement("div", {className: "tap"}, 
           React.createElement("h2", null, "Tap it out..."), 
@@ -160,7 +164,8 @@ var Display = React.createClass({displayName: "Display", // eslint-disable-line 
         React.createElement("div", {className: "paste"}, 
           React.createElement("h2", null, "...or use the keyboard"), 
           React.createElement(Input, {decodeInput: this.props.decodeInput, 
-                 updateInput: this.props.updateInput})
+                 updateInput: this.props.updateInput, 
+                 input: this.props.input})
         ), 
         React.createElement(Output, {output: this.props.output})
       )
@@ -188,7 +193,7 @@ var Input = React.createClass({displayName: "Input", // eslint-disable-line no-u
     return (
       React.createElement("textarea", {className: "mcode", 
                 onChange: this.handleChange, 
-                value: this.state.input})
+                value: this.props.input})
     );
   }
 });
