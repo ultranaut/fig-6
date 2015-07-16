@@ -205,7 +205,8 @@ var Input = React.createClass({displayName: "Input", // eslint-disable-line no-u
   },
 
   handleChange: function (e) {
-    var inputValue = e.target.value;
+    var invalidChars = /[^. /|-]/g;
+    var inputValue = e.target.value.replace(invalidChars, '');
     this.setState({
       input: inputValue
     });
