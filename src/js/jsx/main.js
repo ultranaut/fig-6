@@ -6,82 +6,77 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
     return {
       input: '',
       output: '',
-
-      dotDuration: 150,
-
-      hotKey: 18, // alt/option key
-      keydown: false,
-
-      downTime: 0,
-      keyUpTime: 0,
-
-      map: {
-        '.-': 'A',
-				'-...': 'B',
-				'-.-.': 'C',
-				'-..': 'D',
-				'.': 'E',
-				'..-.': 'F',
-				'--.': 'G',
-				'....': 'H',
-				'..': 'I',
-				'.---': 'J',
-				'-.-': 'K',
-				'.-..': 'L',
-				'--': 'M',
-				'-.': 'N',
-				'---': 'O',
-				'.--.': 'P',
-				'--.-': 'Q',
-				'.-.': 'R',
-				'...': 'S',
-				'-': 'T',
-				'..-': 'U',
-				'...-': 'V',
-				'.--': 'W',
-				'-..-': 'X',
-				'-.--': 'Y',
-				'--..': 'Z',
-				'-----': '0',
-				'.----': '1',
-				'..---': '2',
-				'...--': '3',
-				'....-': '4',
-				'.....': '5',
-				'-....': '6',
-				'--...': '7',
-				'---..': '8',
-				'----.': '9',
-        '.-.-.-': '.',
-        '--..--': ',',
-        '---...': ':',
-        '..--..': '?',
-        '.----.': '\'',
-        '-....-': '-',
-        '-..-.': '/',
-        '-.--.-': '(',
-        '.-..-.': '"',
-        '.--.-.': '@',
-        '-...-': '=',
-
-				// typographical conveniences to separate words
-				'/': ' ',
-				'|': ' '
-      },
-
-      ongoingTouches: []
+      dotDuration: 200,   // 6wpm
+      hotKey: 18,         // alt/option key
+      signalOn: false,
+      signalStart: 0,
+      signalEnd: 0
     };
+  },
+
+  codeMap: {
+    '.-': 'A',
+    '-...': 'B',
+    '-.-.': 'C',
+    '-..': 'D',
+    '.': 'E',
+    '..-.': 'F',
+    '--.': 'G',
+    '....': 'H',
+    '..': 'I',
+    '.---': 'J',
+    '-.-': 'K',
+    '.-..': 'L',
+    '--': 'M',
+    '-.': 'N',
+    '---': 'O',
+    '.--.': 'P',
+    '--.-': 'Q',
+    '.-.': 'R',
+    '...': 'S',
+    '-': 'T',
+    '..-': 'U',
+    '...-': 'V',
+    '.--': 'W',
+    '-..-': 'X',
+    '-.--': 'Y',
+    '--..': 'Z',
+    '-----': '0',
+    '.----': '1',
+    '..---': '2',
+    '...--': '3',
+    '....-': '4',
+    '.....': '5',
+    '-....': '6',
+    '--...': '7',
+    '---..': '8',
+    '----.': '9',
+    '.-.-.-': '.',
+    '--..--': ',',
+    '---...': ':',
+    '..--..': '?',
+    '.----.': '\'',
+    '-....-': '-',
+    '-..-.': '/',
+    '-.--.-': '(',
+    '.-..-.': '"',
+    '.--.-.': '@',
+    '-...-': '=',
+
+    // typographical conveniences to separate words
+    '/': ' ',
+    '|': ' '
   },
 
   componentDidMount: function () {
     // keyboard events
-    window.addEventListener('keydown', this.handleKeyDown);
-    window.addEventListener('keyup', this.handleKeyUp);
+    window.addEventListener('keydown', this.handleSignalStart);
+    window.addEventListener('keyup', this.handleSignalEnd);
 
     // touch events
     var pad = document.getElementById('tap-pad');
-    pad.addEventListener('touchstart', this.handleKeyDown, false);
-    pad.addEventListener('touchend', this.handleKeyUp, false);
+    pad.addEventListener('touchstart', this.handleSignalStart, false);
+    pad.addEventListener('touchend', this.handleSignalEnd, false);
   },
 
   updateInput: function (inputValue) {
@@ -90,16 +85,19 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
     }, this.decodeInput);
   },
 
-  handleKeyDown: function (e) {
-    // only run this on initial keydown event
+  handleSignalStart: function (e) {
+    // prevent keydown and touchstart events from repeatedly
+    // triggering this
     if (e.keyCode === this.state.hotKey
         || e.type === 'touchstart'
-        && !this.state.keydown) {
+        && !this.state.signalOn) {
+      // let me handle this, thank you
       e.preventDefault();
+
       var now = window.performance.now();
 
-      if (this.state.keyUpTime > 0) {
-        var pause = now - this.state.keyUpTime;
+      if (this.state.signalEnd > 0) {
+        var pause = now - this.state.signalEnd;
       }
 
       // if really long pause, start a new word
@@ -113,16 +111,16 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
           input: this.state.input + ' '
         });
       }
-      this.setState({ keyUpTime: 0 });
+      this.setState({ signalEnd: 0 });
 
-      this.setState({ keydown: true, downTime: now });
+      this.setState({ signalOn: true, signalStart: now });
     }
   },
 
-  handleKeyUp: function () {
-    if (this.state.keydown === true) {
+  handleSignalEnd: function () {
+    if (this.state.signalOn === true) {
       var now = window.performance.now();
-      var duration = now - this.state.downTime;
+      var duration = now - this.state.signalStart;
       var input = '';
       if (duration < this.state.dotDuration) {
         input = '.';
@@ -131,9 +129,9 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
         input = '-';
       }
       this.setState({
-        keydown: false,
-        downTime: 0,
-        keyUpTime: now,
+        signalOn: false,
+        signalStart: 0,
+        signalEnd: now,
         input: this.state.input + input
       });
       this.decodeInput();
@@ -154,7 +152,7 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
         char = ' ';
       }
       else {
-        char = this.state.map[token];
+        char = this.codeMap[token];
       }
       decoded += typeof char !== 'undefined' ? char : '';
     }
