@@ -52,6 +52,19 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
 				'--...': '7',
 				'---..': '8',
 				'----.': '9',
+        '.-.-.-': '.',
+        '--..--': ',',
+        '---...': ':',
+        '..--..': '?',
+        '.----.': '\'',
+        '-....-': '-',
+        '-..-.': '/',
+        '-.--.-': '(',
+        '.-..-.': '"',
+        '.--.-.': '@',
+        '-...-': '=',
+
+				// typographical conveniences to separate words
 				'/': ' ',
 				'|': ' '
       },
@@ -155,7 +168,6 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
                updateInput={this.updateInput} />
     );
   }
-
 });
 
 var Display = React.createClass({ // eslint-disable-line no-unused-vars
