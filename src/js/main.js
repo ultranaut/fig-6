@@ -96,17 +96,18 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
 
       var now = window.performance.now();
 
+
       if (this.state.signalEnd > 0) {
         var pause = now - this.state.signalEnd;
       }
 
       // if really long pause, start a new word
-      if (pause > 3000) {
+      if (pause > 7 * this.state.dotDuration) {
         this.setState({
           input: this.state.input + ' / '
         });
       }
-      else if (pause > 4 * this.state.dotDuration) {
+      else if (pause > 3 * this.state.dotDuration) {
         this.setState({
           input: this.state.input + ' '
         });
