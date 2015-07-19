@@ -14,70 +14,7 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
     };
   },
 
-  codeMap: {
-    '.-': 'A',
-    '-...': 'B',
-    '-.-.': 'C',
-    '-..': 'D',
-    '.': 'E',
-    '..-.': 'F',
-    '--.': 'G',
-    '....': 'H',
-    '..': 'I',
-    '.---': 'J',
-    '-.-': 'K',
-    '.-..': 'L',
-    '--': 'M',
-    '-.': 'N',
-    '---': 'O',
-    '.--.': 'P',
-    '--.-': 'Q',
-    '.-.': 'R',
-    '...': 'S',
-    '-': 'T',
-    '..-': 'U',
-    '...-': 'V',
-    '.--': 'W',
-    '-..-': 'X',
-    '-.--': 'Y',
-    '--..': 'Z',
-    '-----': '0',
-    '.----': '1',
-    '..---': '2',
-    '...--': '3',
-    '....-': '4',
-    '.....': '5',
-    '-....': '6',
-    '--...': '7',
-    '---..': '8',
-    '----.': '9',
-    '.-.-.-': '.',
-    '--..--': ',',
-    '---...': ':',
-    '..--..': '?',
-    '.----.': '\'',
-    '-....-': '-',
-    '-..-.': '/',
-    '-.--.-': '(',
-    '.-..-.': '"',
-    '.--.-.': '@',
-    '-...-': '=',
-
-    // typographical conveniences to separate words
-    '/': ' ',
-    '|': ' '
-  },
-
-  // componentDidMount: function () {
-  //   // keyboard events
-  //   window.addEventListener('keydown', this.handleSignalStart);
-  //   window.addEventListener('keyup', this.handleSignalEnd);
-
-  //   // touch events
-  //   var pad = document.getElementById('tap-pad');
-  //   pad.addEventListener('touchstart', this.handleSignalStart, false);
-  //   pad.addEventListener('touchend', this.handleSignalEnd, false);
-  // },
+  codeMap: window.codeMap,
 
   updateInput: function (inputValue) {
     this.setState({
@@ -95,7 +32,6 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
       e.preventDefault();
 
       var now = window.performance.now();
-
 
       if (this.state.signalEnd > 0) {
         var pause = now - this.state.signalEnd;
@@ -141,7 +77,7 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
 
   decodeInput: function () {
     var tokens = this.state.input.split(' ');
-    console.log(this.state.input, tokens);
+    console.log(tokens);
     var decoded = '';
     var char;
     for (var idx in tokens) {
@@ -171,88 +107,7 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
   }
 });
 
-var Display = React.createClass({ // eslint-disable-line no-unused-vars
-  render: function () {
-    return (
-      <div className="app">
-        <header>
-          <h1>Fig. 6.</h1>
-          <img src="images/L-Telegraph1_mod.png" alt="Fig. 6." />
-        </header>
-        <Tapper handleSignalStart={this.props.handleSignalStart}
-                handleSignalEnd={this.props.handleSignalEnd} />
-        <KeyIn  decodeInput={this.props.decodeInput}
-                updateInput={this.props.updateInput}
-                input={this.props.input} />
-        <Output output={this.props.output} />
-      </div>
-    );
-  }
-});
 
-var Tapper = React.createClass({ // eslint-disable-line no-unused-vars
-  componentDidMount: function () {
-    // keyboard events
-    window.addEventListener('keydown', this.props.handleSignalStart, false);
-    window.addEventListener('keyup', this.props.handleSignalEnd, false);
-
-    // touch events
-    var pad = document.getElementById('tap-pad');
-    pad.addEventListener('touchstart', this.props.handleSignalStart, false);
-    pad.addEventListener('touchend', this.props.handleSignalEnd, false);
-
-    console.log(this.props.handleSignalStart);
-  },
-
-  render: function () {
-    return (
-      <div id="tap-pad">
-        <h2>Tap it out here...</h2>
-        <p className='small'>(or use the alt/option key)</p>
-      </div>
-      );
-  }
-});
-
-var KeyIn = React.createClass({ // eslint-disable-line no-unused-vars
-  getInitialState: function () {
-    return {
-      input: ''
-    };
-  },
-
-  handleChange: function (e) {
-    var invalidChars = /[^. /|-]/g;
-    // filter out invalid chars
-    var input = e.target.value.replace(invalidChars, '');
-    this.setState({
-      input: input
-    });
-    this.props.updateInput(input);
-  },
-
-  render: function () {
-    return (
-      <div className="paste">
-        <h2>...or use the keyboard</h2>
-        <textarea className="mcode"
-                  onChange={this.handleChange}
-                  value={this.props.input}
-                  placeholder="dots 'n' dashes 'n' such" />
-      </div>
-    );
-  }
-});
-
-var Output = React.createClass({ // eslint-disable-line no-unused-vars
-  render: function () {
-    return (
-      <div className="output">
-        {this.props.output}
-      </div>
-    );
-  }
-});
 
 /*
  * --- Its's go time --------------------------------------------------
