@@ -69,10 +69,10 @@ gulp.task('react', function () {
 
 gulp.task('watch', function () {
   gulp.watch([paths.html], ['html']);
-  gulp.watch([paths.js], ['js']);
+  // gulp.watch([paths.js], ['js']);
   gulp.watch([paths.jsx], ['react']);
   gulp.watch([paths.css], ['css']);
   gulp.watch([paths.sass], ['sass']);
 });
 
-gulp.task('default', ['connect', 'html', 'js', 'react', 'sass', 'watch']);
+gulp.task('default', ['connect', 'html', 'react', 'sass', 'watch']);
