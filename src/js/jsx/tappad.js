@@ -14,6 +14,7 @@ var Tapper = React.createClass({ // eslint-disable-line no-unused-vars
     window.addEventListener('keyup', this.props.handleSignalEnd, false);
 
     // touch events
+    // TODO: use React events here
     var pad = document.getElementById('tap-pad');
     pad.addEventListener('touchstart', this.props.handleSignalStart, false);
     pad.addEventListener('touchend', this.props.handleSignalEnd, false);

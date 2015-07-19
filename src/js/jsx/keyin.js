@@ -1,3 +1,6 @@
+/* global React */
+'use strict';
+
 var KeyIn = React.createClass({ // eslint-disable-line no-unused-vars
   getInitialState: function () {
     return {

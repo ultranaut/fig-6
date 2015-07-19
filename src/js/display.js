@@ -11,14 +11,8 @@ var Display = React.createClass({displayName: "Display", // eslint-disable-line 
         ), 
         React.createElement(Tapper, {handleSignalStart: this.props.handleSignalStart, 
                 handleSignalEnd: this.props.handleSignalEnd}), 
-        React.createElement(KeyIn, {decodeInput: this.props.decodeInput, 
-                updateInput: this.props.updateInput, 
-                input: this.props.input}), 
         React.createElement(Output, {output: this.props.output})
       )
     );
   }
 });
-
-
-

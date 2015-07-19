@@ -11,14 +11,8 @@ var Display = React.createClass({ // eslint-disable-line no-unused-vars
         </header>
         <Tapper handleSignalStart={this.props.handleSignalStart}
                 handleSignalEnd={this.props.handleSignalEnd} />
-        <KeyIn  decodeInput={this.props.decodeInput}
-                updateInput={this.props.updateInput}
-                input={this.props.input} />
         <Output output={this.props.output} />
       </div>
     );
   }
 });
-
-
-
