@@ -68,16 +68,16 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
     '|': ' '
   },
 
-  componentDidMount: function () {
-    // keyboard events
-    window.addEventListener('keydown', this.handleSignalStart);
-    window.addEventListener('keyup', this.handleSignalEnd);
+  // componentDidMount: function () {
+  //   // keyboard events
+  //   window.addEventListener('keydown', this.handleSignalStart);
+  //   window.addEventListener('keyup', this.handleSignalEnd);
 
-    // touch events
-    var pad = document.getElementById('tap-pad');
-    pad.addEventListener('touchstart', this.handleSignalStart, false);
-    pad.addEventListener('touchend', this.handleSignalEnd, false);
-  },
+  //   // touch events
+  //   var pad = document.getElementById('tap-pad');
+  //   pad.addEventListener('touchstart', this.handleSignalStart, false);
+  //   pad.addEventListener('touchend', this.handleSignalEnd, false);
+  // },
 
   updateInput: function (inputValue) {
     this.setState({
@@ -164,7 +164,9 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
     return (
       React.createElement(Display, {output: this.state.output, 
                input: this.state.input, 
-               updateInput: this.updateInput})
+               updateInput: this.updateInput, 
+               handleSignalStart: this.handleSignalStart, 
+               handleSignalEnd: this.handleSignalEnd})
     );
   }
 });
@@ -177,26 +179,42 @@ var Display = React.createClass({displayName: "Display", // eslint-disable-line 
           React.createElement("h1", null, "Fig. 6."), 
           React.createElement("img", {src: "images/L-Telegraph1_mod.png", alt: "Fig. 6."})
         ), 
-        React.createElement("div", {id: "tap-pad"}, 
-          React.createElement("h2", null, "Tap it out here..."), 
-          React.createElement("p", {className: "small"}, "(or use the alt/option key)")
-        ), 
-        React.createElement("hr", null), 
-        React.createElement(Output, {output: this.props.output}), 
-        React.createElement("hr", null), 
-        React.createElement("div", {className: "paste"}, 
-          React.createElement("h2", null, "...or use the keyboard"), 
-          React.createElement(Input, {decodeInput: this.props.decodeInput, 
-                 updateInput: this.props.updateInput, 
-                 input: this.props.input})
-        )
+        React.createElement(Tapper, {handleSignalStart: this.props.handleSignalStart, 
+                handleSignalEnd: this.props.handleSignalEnd}), 
+        React.createElement(KeyIn, {decodeInput: this.props.decodeInput, 
+                updateInput: this.props.updateInput, 
+                input: this.props.input}), 
+        React.createElement(Output, {output: this.props.output})
       )
     );
   }
-
 });
 
-var Input = React.createClass({displayName: "Input", // eslint-disable-line no-unused-vars
+var Tapper = React.createClass({displayName: "Tapper", // eslint-disable-line no-unused-vars
+  componentDidMount: function () {
+    // keyboard events
+    window.addEventListener('keydown', this.props.handleSignalStart, false);
+    window.addEventListener('keyup', this.props.handleSignalEnd, false);
+
+    // touch events
+    var pad = document.getElementById('tap-pad');
+    pad.addEventListener('touchstart', this.props.handleSignalStart, false);
+    pad.addEventListener('touchend', this.props.handleSignalEnd, false);
+
+    console.log(this.props.handleSignalStart);
+  },
+
+  render: function () {
+    return (
+      React.createElement("div", {id: "tap-pad"}, 
+        React.createElement("h2", null, "Tap it out here..."), 
+        React.createElement("p", {className: "small"}, "(or use the alt/option key)")
+      )
+      );
+  }
+});
+
+var KeyIn = React.createClass({displayName: "KeyIn", // eslint-disable-line no-unused-vars
   getInitialState: function () {
     return {
       input: ''
@@ -205,19 +223,23 @@ var Input = React.createClass({displayName: "Input", // eslint-disable-line no-u
 
   handleChange: function (e) {
     var invalidChars = /[^. /|-]/g;
-    var inputValue = e.target.value.replace(invalidChars, '');
+    // filter out invalid chars
+    var input = e.target.value.replace(invalidChars, '');
     this.setState({
-      input: inputValue
+      input: input
     });
-    this.props.updateInput(inputValue);
+    this.props.updateInput(input);
   },
 
   render: function () {
     return (
-      React.createElement("textarea", {className: "mcode", 
-                onChange: this.handleChange, 
-                value: this.props.input, 
-                placeholder: "dots 'n' dashes 'n' such"})
+      React.createElement("div", {className: "paste"}, 
+        React.createElement("h2", null, "...or use the keyboard"), 
+        React.createElement("textarea", {className: "mcode", 
+                  onChange: this.handleChange, 
+                  value: this.props.input, 
+                  placeholder: "dots 'n' dashes 'n' such"})
+      )
     );
   }
 });

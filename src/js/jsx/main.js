@@ -68,16 +68,16 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
     '|': ' '
   },
 
-  componentDidMount: function () {
-    // keyboard events
-    window.addEventListener('keydown', this.handleSignalStart);
-    window.addEventListener('keyup', this.handleSignalEnd);
+  // componentDidMount: function () {
+  //   // keyboard events
+  //   window.addEventListener('keydown', this.handleSignalStart);
+  //   window.addEventListener('keyup', this.handleSignalEnd);
 
-    // touch events
-    var pad = document.getElementById('tap-pad');
-    pad.addEventListener('touchstart', this.handleSignalStart, false);
-    pad.addEventListener('touchend', this.handleSignalEnd, false);
-  },
+  //   // touch events
+  //   var pad = document.getElementById('tap-pad');
+  //   pad.addEventListener('touchstart', this.handleSignalStart, false);
+  //   pad.addEventListener('touchend', this.handleSignalEnd, false);
+  // },
 
   updateInput: function (inputValue) {
     this.setState({
@@ -164,7 +164,9 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
     return (
       <Display output={this.state.output}
                input={this.state.input}
-               updateInput={this.updateInput} />
+               updateInput={this.updateInput}
+               handleSignalStart={this.handleSignalStart}
+               handleSignalEnd={this.handleSignalEnd} />
     );
   }
 });
@@ -177,26 +179,42 @@ var Display = React.createClass({ // eslint-disable-line no-unused-vars
           <h1>Fig. 6.</h1>
           <img src="images/L-Telegraph1_mod.png" alt="Fig. 6." />
         </header>
-        <div id="tap-pad">
-          <h2>Tap it out here...</h2>
-          <p className='small'>(or use the alt/option key)</p>
-        </div>
-        <hr />
+        <Tapper handleSignalStart={this.props.handleSignalStart}
+                handleSignalEnd={this.props.handleSignalEnd} />
+        <KeyIn  decodeInput={this.props.decodeInput}
+                updateInput={this.props.updateInput}
+                input={this.props.input} />
         <Output output={this.props.output} />
-        <hr />
-        <div className="paste">
-          <h2>...or use the keyboard</h2>
-          <Input decodeInput={this.props.decodeInput}
-                 updateInput={this.props.updateInput}
-                 input={this.props.input} />
-        </div>
       </div>
     );
   }
-
 });
 
-var Input = React.createClass({ // eslint-disable-line no-unused-vars
+var Tapper = React.createClass({ // eslint-disable-line no-unused-vars
+  componentDidMount: function () {
+    // keyboard events
+    window.addEventListener('keydown', this.props.handleSignalStart, false);
+    window.addEventListener('keyup', this.props.handleSignalEnd, false);
+
+    // touch events
+    var pad = document.getElementById('tap-pad');
+    pad.addEventListener('touchstart', this.props.handleSignalStart, false);
+    pad.addEventListener('touchend', this.props.handleSignalEnd, false);
+
+    console.log(this.props.handleSignalStart);
+  },
+
+  render: function () {
+    return (
+      <div id="tap-pad">
+        <h2>Tap it out here...</h2>
+        <p className='small'>(or use the alt/option key)</p>
+      </div>
+      );
+  }
+});
+
+var KeyIn = React.createClass({ // eslint-disable-line no-unused-vars
   getInitialState: function () {
     return {
       input: ''
@@ -205,19 +223,23 @@ var Input = React.createClass({ // eslint-disable-line no-unused-vars
 
   handleChange: function (e) {
     var invalidChars = /[^. /|-]/g;
-    var inputValue = e.target.value.replace(invalidChars, '');
+    // filter out invalid chars
+    var input = e.target.value.replace(invalidChars, '');
     this.setState({
-      input: inputValue
+      input: input
     });
-    this.props.updateInput(inputValue);
+    this.props.updateInput(input);
   },
 
   render: function () {
     return (
-      <textarea className="mcode"
-                onChange={this.handleChange}
-                value={this.props.input}
-                placeholder="dots 'n' dashes 'n' such" />
+      <div className="paste">
+        <h2>...or use the keyboard</h2>
+        <textarea className="mcode"
+                  onChange={this.handleChange}
+                  value={this.props.input}
+                  placeholder="dots 'n' dashes 'n' such" />
+      </div>
     );
   }
 });
