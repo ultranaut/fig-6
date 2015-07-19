@@ -22,6 +22,12 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
     }, this.decodeInput);
   },
 
+  clearInput: function () {
+    this.setState({
+      input: ''
+    }, this.decodeInput);
+  },
+
   handleSignalStart: function (e) {
     // prevent keydown and touchstart events from repeatedly
     // triggering this
@@ -101,6 +107,7 @@ var App = React.createClass({displayName: "App", // eslint-disable-line no-unuse
       React.createElement(Display, {output: this.state.output, 
                input: this.state.input, 
                updateInput: this.updateInput, 
+               clearInput: this.clearInput, 
                handleSignalStart: this.handleSignalStart, 
                handleSignalEnd: this.handleSignalEnd})
     );

@@ -48,9 +48,20 @@ header {
 }
 
 .output {
-  margin: 20px;
-  font-size: 1.4rem;
-  text-align: left;
+  .display {
+    margin: 20px;
+    font-size: 1.4rem;
+    text-align: left;
+  }
+  .clear-button {
+    padding: 0.6rem;
+    background-color: #666;
+    border: solid 1px #444;
+    border-radius: 4px;
+  }
+  .clear-button:focus {
+    outline: 0;
+  }
 }
 
 .small {
@@ -61,18 +72,10 @@ header {
 
 
 
+/*
+ * Helper classes
+ */
 
-
-
-
-
-
-
-
-
-/* ==========================================================================
-Helper classes
-========================================================================== */
 /*
  * Clearfix: contain floats
  *
