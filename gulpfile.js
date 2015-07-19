@@ -6,13 +6,21 @@ var connect = require('gulp-connect');
 var lint = require('gulp-eslint');
 var plumber = require('gulp-plumber');
 var react = require('gulp-react');
+var sass = require('gulp-sass');
 
 var paths = {
   src: './src',
-  css: './src/css/*.css',
+  css: './src/css',
+  sass: './src/css/scss/*.scss',
   html: './src/*.html',
   js: './src/js/*.js',
   jsx: './src/js/jsx/**/*.js'
+};
+
+var options = {
+  sass: {
+    outputStyle: 'compressed'
+  }
 };
 
 gulp.task('connect', function () {
@@ -29,7 +37,15 @@ gulp.task('html', function () {
       .pipe(connect.reload());
 });
 
-gulp.task('css', function () {
+gulp.task('sass', function() {
+  return gulp.src(paths.sass)
+    .pipe(plumber())
+    .pipe(sass(options.sass).on('error', sass.logError))
+    .pipe(gulp.dest(paths.css))
+    .pipe(connect.reload());
+});
+
+gulp.task('css', ['sass'], function () {
   return gulp.src(paths.css)
     .pipe(plumber())
     .pipe(connect.reload());
@@ -56,6 +72,7 @@ gulp.task('watch', function () {
   gulp.watch([paths.js], ['js']);
   gulp.watch([paths.jsx], ['react']);
   gulp.watch([paths.css], ['css']);
+  gulp.watch([paths.sass], ['sass']);
 });
 
-gulp.task('default', ['connect', 'html', 'js', 'react', 'watch']);
+gulp.task('default', ['connect', 'html', 'js', 'react', 'sass', 'watch']);
