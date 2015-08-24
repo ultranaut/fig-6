@@ -13,5 +13,3 @@ var Output = React.createClass({ // eslint-disable-line no-unused-vars
     );
   }
 });
-
-

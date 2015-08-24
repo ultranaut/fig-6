@@ -1,4 +1,4 @@
-/* global React */
+/* global React, codeMap */
 'use strict';
 
 var App = React.createClass({ // eslint-disable-line no-unused-vars
@@ -14,7 +14,11 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
     };
   },
 
-  codeMap: window.codeMap,
+  codeMap: null,
+
+  componentWillMount: function () {
+    this.codeMap = this.props.codeMap;
+  },
 
   updateInput: function (inputValue) {
     this.setState({
@@ -120,7 +124,7 @@ var App = React.createClass({ // eslint-disable-line no-unused-vars
  * --- Its's go time --------------------------------------------------
  */
 /* eslint-disable no-unused-vars*/
-var chatApp = React.render(<App url='http://localhost:1337' />,
+var chatApp = React.render(<App codeMap={codeMap} />,
                            document.querySelector('.container'));
 /* eslint-enable no-unused-vars*/
 

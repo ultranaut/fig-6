@@ -13,5 +13,3 @@ var Output = React.createClass({displayName: "Output", // eslint-disable-line no
     );
   }
 });
-
-
