@@ -1,6 +1,7 @@
 import React from 'react';
 import telegraph from '../images/L-Telegraph1_mod.png';
 import Tapper from './Tapper';
+import Output from './Output';
 
 class App extends React.Component {
   state = {
@@ -118,7 +119,7 @@ class App extends React.Component {
           handleSignalStart={this.props.handleSignalStart}
           handleSignalEnd={this.props.handleSignalEnd}
         />
-        {/* <Output output={this.props.output} clearInput={this.props.clearInput} /> */}
+        <Output output={this.props.output} clearInput={this.props.clearInput} />
       </div>
     );
   }
