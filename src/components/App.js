@@ -1,6 +1,6 @@
 import React from 'react';
 import telegraph from '../images/L-Telegraph1_mod.png';
-// import '../index.css';
+import Tapper from './Tapper';
 
 class App extends React.Component {
   state = {
@@ -114,10 +114,10 @@ class App extends React.Component {
           <h1>Fig. 6.</h1>
           <img src={telegraph} alt="Fig. 6." />
         </header>
-        {/* <Tapper */}
-        {/*   handleSignalStart={this.props.handleSignalStart} */}
-        {/*   handleSignalEnd={this.props.handleSignalEnd} */}
-        {/* /> */}
+        <Tapper
+          handleSignalStart={this.props.handleSignalStart}
+          handleSignalEnd={this.props.handleSignalEnd}
+        />
         {/* <Output output={this.props.output} clearInput={this.props.clearInput} /> */}
       </div>
     );
