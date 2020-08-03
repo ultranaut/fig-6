@@ -14,6 +14,8 @@ class App extends React.Component {
     signalEnd: 0,
   };
 
+  codeMap = null;
+
   componentDidMount = () => {
     this.codeMap = this.props.codeMap;
   };
