@@ -2,6 +2,7 @@ import React from 'react';
 import telegraph from '../images/L-Telegraph1_mod.png';
 import Tapper from './Tapper';
 import Output from './Output';
+import { codeMap } from '../codemap';
 
 class App extends React.Component {
   state = {
@@ -14,11 +15,7 @@ class App extends React.Component {
     signalEnd: 0,
   };
 
-  codeMap = null;
-
-  componentDidMount = () => {
-    this.codeMap = this.props.codeMap;
-  };
+  codeMap = codeMap;
 
   updateInput = (inputValue) => {
     this.setState(
@@ -118,29 +115,13 @@ class App extends React.Component {
           <img src={telegraph} alt="Fig. 6." />
         </header>
         <Tapper
-          handleSignalStart={this.props.handleSignalStart}
-          handleSignalEnd={this.props.handleSignalEnd}
+          handleSignalStart={this.handleSignalStart}
+          handleSignalEnd={this.handleSignalEnd}
         />
-        <Output output={this.props.output} clearInput={this.props.clearInput} />
+        <Output output={this.state.output} clearInput={this.clearInput} />
       </div>
     );
   }
 }
-
-// var App = React.createClass({
-
-//   codeMap: null,
-
-//   render: function () {
-//     return React.createElement(Display, {
-//       output: this.state.output,
-//       input: this.state.input,
-//       updateInput: this.updateInput,
-//       clearInput: this.clearInput,
-//       handleSignalStart: this.handleSignalStart,
-//       handleSignalEnd: this.handleSignalEnd,
-//     });
-//   },
-// });
 
 export default App;

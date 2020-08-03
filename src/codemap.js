@@ -1,6 +1,4 @@
-'use strict';
-
-var codeMap = { // eslint-disable-line no-unused-vars
+export const codeMap = {
   '.-': 'A',
   '-...': 'B',
   '-.-.': 'C',
@@ -41,7 +39,7 @@ var codeMap = { // eslint-disable-line no-unused-vars
   '--..--': ',',
   '---...': ':',
   '..--..': '?',
-  '.----.': '\'',
+  '.----.': "'",
   '-....-': '-',
   '-..-.': '/',
   '-.--.-': '(',
@@ -51,5 +49,5 @@ var codeMap = { // eslint-disable-line no-unused-vars
 
   // typographical conveniences to separate words
   '/': ' ',
-  '|': ' '
+  '|': ' ',
 };
