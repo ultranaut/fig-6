@@ -36,6 +36,8 @@ class App extends React.Component {
   };
 
   handleSignalStart = (e) => {
+    let pause = 0;
+
     // prevent keydown and touchstart events from repeatedly
     // triggering this
     if (
@@ -45,10 +47,10 @@ class App extends React.Component {
       // let me handle this, thank you
       e.preventDefault();
 
-      var now = window.performance.now();
+      const now = window.performance.now();
 
       if (this.state.signalEnd > 0) {
-        var pause = now - this.state.signalEnd;
+        pause = now - this.state.signalEnd;
       }
 
       // if really long pause, start a new word
@@ -69,9 +71,9 @@ class App extends React.Component {
 
   handleSignalEnd = () => {
     if (this.state.signalOn === true) {
-      var now = window.performance.now();
-      var duration = now - this.state.signalStart;
-      var input = '';
+      const now = window.performance.now();
+      const duration = now - this.state.signalStart;
+      let input = '';
       if (duration < this.state.dotDuration) {
         input = '.';
       } else {
@@ -88,12 +90,12 @@ class App extends React.Component {
   };
 
   decodeInput = () => {
-    var tokens = this.state.input.split(' ');
+    const tokens = this.state.input.split(' ');
     console.log(tokens);
-    var decoded = '';
-    var char;
-    for (var idx in tokens) {
-      var token = tokens[idx];
+    let decoded = '';
+    let char;
+    for (const idx in tokens) {
+      const token = tokens[idx];
       if (token === '') {
         continue;
       }

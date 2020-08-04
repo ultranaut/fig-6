@@ -9,7 +9,7 @@ class Tapper extends React.Component {
     window.addEventListener('keyup', this.props.handleSignalEnd, false);
 
     // touch events
-    var pad = document.getElementById('tap-pad');
+    const pad = document.getElementById('tap-pad');
     pad.addEventListener('touchstart', this.props.handleSignalStart, false);
     pad.addEventListener('touchend', this.props.handleSignalEnd, false);
   };
