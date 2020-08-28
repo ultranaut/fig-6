@@ -8,9 +8,12 @@ class Tapper extends React.Component {
 
   state = {
     input: '',
-    signalOn: false,
-    signalStart: 0,
-    signalEnd: 0,
+  };
+
+  signal = {
+    on: false,
+    start: 0,
+    end: 0,
   };
 
   handleSignalStart = (e) => {
@@ -20,7 +23,7 @@ class Tapper extends React.Component {
     // triggering this
     if (
       e.keyCode === this.config.hotKey ||
-      (e.type === 'touchstart' && !this.state.signalOn)
+      (e.type === 'touchstart' && !this.signal.on)
     ) {
       // let me handle this, thank you
       e.preventDefault();
@@ -29,16 +32,14 @@ class Tapper extends React.Component {
       const now = window.performance.now();
 
       // figure out how long ago the previous signal ended
-      if (this.state.signalEnd > 0) {
-        pause = now - this.state.signalEnd;
+      if (this.signal.end > 0) {
+        pause = now - this.signal.end;
       }
 
       // start a new signal
-      this.setState({
-        signalOn: true,
-        signalStart: now,
-        signalEnd: 0,
-      });
+      this.signal.on = true;
+      this.signal.start = now;
+      this.signal.end = 0;
 
       // if really long pause, indicate a new word...
       if (pause > 7 * this.config.dotDuration) {
@@ -57,9 +58,9 @@ class Tapper extends React.Component {
   };
 
   handleSignalEnd = () => {
-    if (this.state.signalOn === true) {
+    if (this.signal.on === true) {
       const now = window.performance.now();
-      const signalDuration = now - this.state.signalStart;
+      const signalDuration = now - this.signal.start;
       let input = '';
 
       // dit or dah?
@@ -71,11 +72,11 @@ class Tapper extends React.Component {
 
       // clear the active signal
       this.setState({
-        signalOn: false,
-        signalStart: 0,
-        signalEnd: now,
         input: this.state.input + input,
       });
+      this.signal.on = false;
+      this.signal.start = 0;
+      this.signal.end = now;
 
       console.log('input:', this.state.input);
       this.props.updateAppInput(this.state.input);
@@ -94,6 +95,7 @@ class Tapper extends React.Component {
   };
 
   render() {
+    console.log('render');
     return (
       <div id="tap-pad" className="input-area">
         <h2>Tap it out here...</h2>
