@@ -6,10 +6,6 @@ class Tapper extends React.Component {
     dotDuration: 200, // 6wpm
   };
 
-  state = {
-    input: '',
-  };
-
   signal = {
     on: false,
     start: 0,
@@ -41,19 +37,15 @@ class Tapper extends React.Component {
       this.signal.start = now;
       this.signal.end = 0;
 
-      // if really long pause, indicate a new word...
+      // if really long pause, we're starting a new word...
       if (pause > 7 * this.config.dotDuration) {
-        this.setState({
-          input: this.state.input + ' / ',
-        });
+        this.props.sendSignal(' / ');
       }
-      // ...otherwise it's a new character
+      // ...otherwise it's a new character...
       else if (pause > 3 * this.config.dotDuration) {
-        this.setState({
-          input: this.state.input + ' ',
-        });
+        this.props.sendSignal(' ');
       }
-      // default: it's a dit or a dah
+      // ...otherwise it's just another dit or dah
     }
   };
 
@@ -61,25 +53,18 @@ class Tapper extends React.Component {
     if (this.signal.on === true) {
       const now = window.performance.now();
       const signalDuration = now - this.signal.start;
-      let input = '';
+      let signal = '';
 
       // dit or dah?
-      if (signalDuration < this.config.dotDuration) {
-        input = '.';
-      } else {
-        input = '-';
-      }
+      signal = signalDuration < this.config.dotDuration ? '.' : '-';
 
       // clear the active signal
-      this.setState({
-        input: this.state.input + input,
-      });
       this.signal.on = false;
       this.signal.start = 0;
       this.signal.end = now;
 
-      console.log('input:', this.state.input);
-      this.props.updateAppInput(this.state.input);
+      // send the signal up
+      this.props.sendSignal(signal);
     }
   };
 
@@ -95,7 +80,6 @@ class Tapper extends React.Component {
   };
 
   render() {
-    console.log('render');
     return (
       <div id="tap-pad" className="input-area">
         <h2>Tap it out here...</h2>

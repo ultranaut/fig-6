@@ -9,7 +9,7 @@ class Output extends React.Component {
           type="button"
           className="clear-button"
           value="clear"
-          onClick={this.props.clearInput}
+          onClick={this.props.clearSignal}
         />
       </div>
     );
