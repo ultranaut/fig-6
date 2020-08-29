@@ -35,8 +35,8 @@ class App extends React.Component {
           <h1>Fig. 6.</h1>
           <img src={telegraph} alt="Fig. 6." />
         </header>
-        <Tapper sendSignal={this.updateSignal} />
-        <Output output={this.state.decoded} clearSignal={this.clearSignal} />
+        <Tapper sendSignal={this.updateSignal} clearSignal={this.clearSignal} />
+        <Output output={this.state.decoded} />
       </div>
     );
   }

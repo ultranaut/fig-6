@@ -5,12 +5,6 @@ class Output extends React.Component {
     return (
       <div className="output">
         <div className="display">{this.props.output}</div>
-        <input
-          type="button"
-          className="clear-button"
-          value="clear"
-          onClick={this.props.clearSignal}
-        />
       </div>
     );
   }

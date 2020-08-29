@@ -4,6 +4,7 @@ class Tapper extends React.Component {
   config = {
     hotKey: 18, // alt/option key
     dotDuration: 200, // 6wpm
+    longPressDuration: 1000,
   };
 
   signal = {
@@ -63,8 +64,14 @@ class Tapper extends React.Component {
       this.signal.start = 0;
       this.signal.end = now;
 
-      // send the signal up
-      this.props.sendSignal(signal);
+      // clear signal on long press
+      if (signalDuration > this.config.longPressDuration) {
+        this.props.clearSignal();
+      }
+      // otherwise, send the signal up
+      else {
+        this.props.sendSignal(signal);
+      }
     }
   };
 
@@ -85,6 +92,7 @@ class Tapper extends React.Component {
         <h2>Tap it out here...</h2>
         <div className="tent-pole">
           <p className="small">(or use the alt/option key)</p>
+          <p>Long press to clear</p>
         </div>
       </div>
     );
