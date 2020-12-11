@@ -4,7 +4,7 @@
   "author": "John Shearer <john@ultranaut.com> (http://ultranaut.com)",
   "license": "MIT",
   "private": true,
-  "homepage": "https://ultranaut.com/morse",
+  "homepage": "https://fig6.ultranaut.com",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
