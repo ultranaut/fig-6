@@ -10,7 +10,7 @@ class App extends React.Component {
     decoded: '',
   };
 
-  updateSignal = (signal) => {
+  processSignal = (signal) => {
     this.setState({ signal: this.state.signal + signal }, this.decodeSignal);
   };
 
@@ -33,7 +33,7 @@ class App extends React.Component {
           <h1>Fig. 6.</h1>
           <img src={telegraph} alt="Fig. 6." />
         </header>
-        <Tapper sendSignal={this.updateSignal} clearSignal={this.clearSignal} />
+        <Tapper sendSignal={this.processSignal} clearSignal={this.clearSignal} />
         <Output output={this.state.decoded} />
       </div>
     );
