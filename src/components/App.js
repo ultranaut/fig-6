@@ -1,16 +1,14 @@
 import React from 'react';
 import telegraph from '../images/L-Telegraph1_mod.png';
+import codeMap from '../codemap';
 import Tapper from './Tapper';
 import Output from './Output';
-import { codeMap } from '../codemap';
 
 class App extends React.Component {
   state = {
     signal: '',
     decoded: '',
   };
-
-  codeMap = codeMap;
 
   updateSignal = (signal) => {
     this.setState({ signal: this.state.signal + signal }, this.decodeSignal);
@@ -23,7 +21,7 @@ class App extends React.Component {
   decodeSignal = () => {
     const tokens = this.state.signal.split(' ');
     const decoded = tokens.reduce((decoded, token) => {
-      return decoded + (this.codeMap[token] || '');
+      return decoded + (codeMap.get(token) || '');
     }, '');
     this.setState({ decoded: decoded });
   };
